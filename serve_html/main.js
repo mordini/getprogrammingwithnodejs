@@ -5,19 +5,80 @@ const http = require('http');
 const httpStatus = require('http-status-codes');
 const fs = require('fs'); // file system module
 
-// set up route mapping for html files
-// NO LONGER USED DUE TO getViewUrl function interpolation of view request
-const routeMap = {
-    '/': 'views/index.html'
-};
+// // set up route mapping for html files
+// // NO LONGER USED DUE TO getViewUrl function interpolation of view request
+// const routeMap = {
+//     '/': 'views/index.html'
+// };
 
 // interpolate the URL into the filepath (EX. turn '/about' URL into 'views/about.html')
 const getViewUrl = (url) => {
     console.log(`request url: ${url}`);
-
     return `views${url}.html`; // the '/' exists as first character in the url request already
 };
 
+const sendErrorResponse = res => { // Create error-handling function
+
+    res.writeHead(httpStatus.StatusCodes.NOT_FOUND, {
+        'Content-Type': 'text/html'
+    });
+    res.write(`<h1>${res.statusCode}:${res.statusMessage}</br></br>What did you DO!?</h1>`);
+    res.end();
+};
+
+http
+    .createServer((req, res) => {
+        let url = req.url;  //store the request URL into a variable
+        if (url.indexOf('.html') !== -1) { // check for file extension
+            res.writeHead(httpStatus.StatusCodes.OK, {
+                'Content-Type': 'text/html'
+            });
+            customReadFile(`./views${url}`, res);
+        } else if (url.indexOf('.js') !== -1) {
+            res.writeHead(httpStatus.StatusCodes.OK, {
+                'Content-Type': 'text/javascript'
+            });
+            customReadFile(`./public/js${url}`, res);
+
+        } else if (url.indexOf('.css') !== -1) {
+            res.writeHead(httpStatus.StatusCodes.OK, {
+                'Content-Type': 'text/css'
+            });
+            customReadFile(`./public/css${url}`, res);
+
+        } else if (url.indexOf('.png') !== -1) {
+            res.writeHead(httpStatus.StatusCodes.OK, {
+                'Content-Type': 'image/png'
+            });
+            customReadFile(`./public/images${url}`, res);
+
+        } else {
+            sendErrorResponse(res);
+        }
+    })
+    .listen(port);
+
+console.log(`the server has started on port: ${port}`);
+
+const customReadFile = (file_path, res) => { // look for a file by the name requested
+    if (fs.existsSync(file_path)) { // check if the file exists
+        fs.readFile(file_path, (error, data) => { // error comes first
+            if (error) {
+                console.log(error);
+                sendErrorResponse(res);
+                return;
+            }
+            res.write(data);
+            res.end();
+        });
+    } else {
+        sendErrorResponse(res);
+    }
+};
+
+/*
+
+// MOVING TO ROUTING MODULE AFTER CREATION
 http
     .createServer((req, res) => {
 
@@ -53,3 +114,7 @@ http
     .listen(port); // turn the server on
 
 console.log(`the server has started on port: ${port}`);
+
+
+*/
+
