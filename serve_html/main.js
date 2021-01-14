@@ -23,27 +23,40 @@ const customReadFile = (file, res) => {
 };
 
 // register routes with 'get' and 'post'
+// note the router.get(), first parameter, points to where you'd like for it to be routed,
+// (of course)
 router.get('/', (req, res) => {
     res.writeHead(httpStatus.StatusCodes.OK, plainTextContentType);
     res.end('THIS IS A PLAINTEXT INDEX');
+});
+router.get('/index', (req, res) => {
+    res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
+    customReadFile('views/index.html', res);
 });
 router.get('/index.html', (req, res) => {
     res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
     customReadFile('views/index.html', res);
 });
+router.get('/about', (req, res) => {
+    res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
+    customReadFile('views/about.html', res);
+});
+router.get('/about.html', (req, res) => {
+    res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
+    customReadFile('views/about.html', res);
+});
+router.get('/contact', (req, res) => {
+    res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
+    customReadFile('views/contact.html', res);
+});
+router.get('/contact.html', (req, res) => {
+    res.writeHead(httpStatus.StatusCodes.OK, htmlContentType);
+    customReadFile('views/contact.html', res);
+});
 router.post('/', (req, res) => {
     res.writeHead(httpStatus.StatusCodes.OK, plainTextContentType);
     res.end('THIS HAS BEEN POSTED');
 });
-
-const sendErrorResponse = res => { // Create error-handling function
-
-    res.writeHead(httpStatus.StatusCodes.NOT_FOUND, {
-        'Content-Type': 'text/html'
-    });
-    res.write(`<h1>${res.statusCode}:${res.statusMessage}</br></br>What did you DO!?</h1>`);
-    res.end();
-};
 
 http.createServer(router.handle).listen(port)
 
@@ -52,6 +65,17 @@ console.log(`the server has started on port: ${port}`);
 
 
 // OLD CODE BELOW, REMOVE LATER
+
+// const sendErrorResponse = res => { // Create error-handling function
+
+//     res.writeHead(httpStatus.StatusCodes.NOT_FOUND, {
+//         'Content-Type': 'text/html'
+//     });
+//     res.write(`<h1>${res.statusCode}:${res.statusMessage}</br></br>What did you DO!?</h1>`);
+//     res.end();
+// };
+
+
 
 // // set up route mapping for html files
 // // NO LONGER USED due to getViewUrl function interpolation of view request

@@ -24,7 +24,7 @@ exports.handle = (req, res) => { //Create a function called 'handle' to process 
             routes[req.method][req.url](req, res);
         } else {
             res.writeHead(httpStatus.StatusCodes.NOT_FOUND, htmlContentType);
-            res.end('<h1> NO such file exists</h1>');
+            res.end('<h1>NO such file exists</h1>');
         }
     } catch (ex) {
         console.log(`error: ${ex}`);
