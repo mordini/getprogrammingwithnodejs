@@ -9,12 +9,13 @@ exports.post = (req, res) => {  // try:  curl --date "first_name=Steve&last_name
     res.send(`POST successful!`);
 };
 
-// adding route to get URL parameters
+// adding route to log URL parameters
 exports.sendReqParam = (req, res) => {
     let veg = req.params.vegetable;  //catch the vegetable param in /items (try /items/corn)
     res.send(`this is the page for ${veg}, you rebel scum.`);
 };
 
+// adding route to log URL
 exports.logRequestUrl = (req, res, next) => {
     console.log(`homeController export middleware: logRequestUrl`);
     console.log(`request made to ${req.url}`); // log the request for demo
