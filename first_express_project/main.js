@@ -4,7 +4,7 @@ const port = 3000;
 const express = require('express'); // Require express
 const app = express(); // Assign express to the app
 
-// set up a 'GET' route for the home page
+// set up a 'GET' route for the home page (handler)
 app.get('/', (req, res) => {
     res.send('Hello, Universe!'); // issue a response from the server to the client with res.send
 
